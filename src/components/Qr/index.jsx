@@ -4,6 +4,7 @@ import styles from "./index.module.scss";
 
 const Qr = () => {
     const [data, setData] = useState({});
+    const [devices, setDevices] = useState({});
 
     const handleScan = (e) => {
         if (e?.text && !Object.keys(data || {}).length) {
@@ -19,18 +20,46 @@ const Qr = () => {
         console.error(err);
     };
 
-    console.log(styles);
+    useEffect(() => {
+        navigator.mediaDevices.enumerateDevices()
+            .then((devices) => {
+                const videoSelect = []
+                devices.forEach((device) => {
+                    if (device.kind === 'videoinput') {
+                        videoSelect.push(device)
+                    }
+                })
+                return videoSelect
+            })
+            .then((devices) => {
+                setDevices({
+                    cameraId: devices[0].deviceId,
+                    devices,
+                    loading: false,
+                })
+            })
+    }, [])
+
+    const changeCamera = (cameraId) => {
+        setDevices({
+            ...devices,
+            cameraId,
+        });
+    };
 
     return (
         <div>
             <button className={styles["btn"]} onClick={refresh}>Refresh</button>
+            <div className={styles["devices"]}>
+                {devices.devices.map((dev) => <button onClick={() => changeCamera(dev.deviceId)} className={styles["btn"]}>{dev.label}</button>)}
+            </div>
             {!Object.keys(data || {}).length ? (
                 <QrReader
                     className={styles["scanner"]}
                     onScan={handleScan}
-                    delay={500}
+                    // delay={500}
                     onError={handleError}
-                    facingMode="rear"
+                    // constraints={devices.cameraId && ({ audio: false, video: { deviceId: devices.cameraId } })}
                 />
             ) : null}
 

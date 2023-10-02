@@ -13,3 +13,10 @@
     display: block;
     outline: none;
 }
+
+.devices {
+    display: flex;
+    button {
+        height: 30px;
+    }
+}
