@@ -51,7 +51,7 @@ const Qr = () => {
         <div>
             <button className={styles["btn"]} onClick={refresh}>Refresh</button>
             <div className={styles["devices"]}>
-                {devices.devices.map((dev) => <button onClick={() => changeCamera(dev.deviceId)} className={styles["btn"]}>{dev.label}</button>)}
+                {devices?.devices?.map((dev) => <button onClick={() => changeCamera(dev.deviceId)} className={styles["btn"]}>{dev.label}</button>)}
             </div>
             {!Object.keys(data || {}).length ? (
                 <QrReader
