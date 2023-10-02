@@ -30,7 +30,7 @@ const Qr = () => {
                     onScan={handleScan}
                     delay={500}
                     onError={handleError}
-                    facingMode={rear}
+                    facingMode="rear"
                 />
             ) : null}
 
