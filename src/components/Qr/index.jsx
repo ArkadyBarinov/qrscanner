@@ -4,7 +4,9 @@ import styles from "./index.module.scss";
 
 const Qr = () => {
     const [data, setData] = useState({});
-    const [devices, setDevices] = useState({});
+    const [devices, setDevices] = useState({
+        facingMode: 'environment'
+    });
 
     const handleScan = (e) => {
         if (e?.text && !Object.keys(data || {}).length) {
