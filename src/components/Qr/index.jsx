@@ -28,7 +28,9 @@ const Qr = () => {
                 <QrReader
                     className={styles["scanner"]}
                     onScan={handleScan}
+                    delay={500}
                     onError={handleError}
+                    facingMode={rear}
                 />
             ) : null}
 
