@@ -59,9 +59,9 @@ const Qr = () => {
                 <QrReader
                     className={styles["scanner"]}
                     onScan={handleScan}
-                    // delay={500}
+                    delay={500}
                     onError={handleError}
-                    // constraints={devices.cameraId && ({ audio: false, video: { deviceId: devices.cameraId } })}
+                    constraints={devices.cameraId && ({ audio: false, video: { deviceId: devices.cameraId } })}
                 />
             ) : null}
 
