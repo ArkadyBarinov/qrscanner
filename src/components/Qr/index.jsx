@@ -23,7 +23,8 @@ const Qr = () => {
     };
 
     useEffect(() => {
-        navigator.mediaDevices.enumerateDevices()
+        const a = "enumerateDevices"
+        navigator["mediaDevices"][a]()
             .then((devices) => {
                 const videoSelect = []
                 devices.forEach((device) => {

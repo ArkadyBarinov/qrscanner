@@ -8,6 +8,13 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "browserslist": [
+    "chrome 64",
+    "edge 79",
+    "firefox 120",
+    "opera 51",
+    "safari 14"
+  ],
   "dependencies": {
     "next": "latest",
     "react": "latest",
