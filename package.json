@@ -16,7 +16,7 @@
     "safari 14"
   ],
   "dependencies": {
-    "next": "latest",
+    "next": "^13.5.4",
     "react": "latest",
     "react-dom": "latest",
     "react-qr-scanner": "^1.0.0-alpha.11",
