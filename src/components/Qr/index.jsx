@@ -4,6 +4,10 @@ import styles from "./index.module.scss";
 
 const Qr = () => {
   const [data, setData] = useState({});
+  const [userData, setUserData] = useState({
+    userName: "",
+    phone: "",
+  });
   const [devices, setDevices] = useState({
     facingMode: "environment",
   });
@@ -51,6 +55,15 @@ const Qr = () => {
     });
   };
 
+  console.log(data);
+
+  const getUserData = (element) => {
+    setUserData({
+        ...userData,
+        userName: element
+    })
+  };
+
   return (
     <div className={styles.container_btn}>
       <button className={styles["btn_refresh"]} onClick={refresh}>
@@ -82,11 +95,10 @@ const Qr = () => {
       ) : null}
 
       {data.text ? (
-        <div className={styles.content} width="560" height="315">
-          {data.text}
+        <div className={styles.content}>
+          {/http/.test(data.text) ? <iframe src={data.text} /> : data.text}
         </div>
       ) : null}
-      {/*<iframe width="560" height="315" src={data.text} /> */}
     </div>
   );
 };
