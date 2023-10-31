@@ -1,8 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;900&family=Racing+Sans+One&display=swap');
 *,
 body {
-    box-sizing: border-box;
-    margin: 0;
-}
-body {
-    padding: 16px;
+	font-family: 'Montserrat', sans-serif;
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0px;
 }
