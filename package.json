@@ -19,6 +19,7 @@
     "next": "^13.5.4",
     "react": "latest",
     "react-dom": "latest",
+    "react-indiana-drag-scroll": "^3.0.3-alpha",
     "react-qr-scanner": "^1.0.0-alpha.11",
     "sass": "^1.68.0"
   }

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import QrReader from 'react-qr-scanner'
-import styles from './index.module.scss'
 import Image from 'next/image'
-import galleryIcon from '../../assets/img/gallery.svg'
+import styles from './index.module.scss'
+import { ScrollContainer } from 'react-indiana-drag-scroll'
+import 'react-indiana-drag-scroll/dist/style.css'
 import lightningIcon from '../../assets/img/lightning.svg'
 import crossIcon from '../../assets/img/cross.svg'
 
@@ -14,7 +15,10 @@ const Qr = () => {
 	})
 	const [devices, setDevices] = useState({
 		facingMode: 'environment',
+		legacyMode: 'true',
 	})
+
+	const [reloded, setReloded] = useState(false)
 
 	const handleScan = e => {
 		if (e?.text && !Object.keys(data || {}).length) {
@@ -53,12 +57,19 @@ const Qr = () => {
 	}, [])
 
 	const changeCamera = cameraId => {
+		setData({})
 		setDevices({
 			...devices,
 			cameraId,
 		})
+		console.log(cameraId)
 	}
 
+	useEffect(() => {
+		if (reloded) {
+			setTimeout(setReloded(), 100)
+		}
+	}, [reloded])
 	console.log(data)
 
 	const getUserData = element => {
@@ -69,24 +80,8 @@ const Qr = () => {
 	}
 
 	return (
-		<div className={styles.container_btn}>
+		<div className={styles['btn_container']}>
 			<div className={styles['btn_footer']}>
-				<div>
-					{/* <input
-						className={styles['input_gallery']}
-						type='file'
-						accept='image/*'
-					/> */}
-					<button type='button' className={styles['btn_gallery']}>
-						<Image
-							src={galleryIcon}
-							height={36}
-							width={36}
-							priority={false}
-							alt='Gallery'
-						/>
-					</button>
-				</div>
 				<button className={styles['btn_refresh']} onClick={refresh}>
 					Refresh
 				</button>
@@ -100,18 +95,20 @@ const Qr = () => {
 					/>
 				</button>
 			</div>
-
 			<div className={styles['btn_header']}>
-				<div className={styles['devices']}>
-					{devices?.devices?.map(dev => (
-						<button
-							onClick={() => changeCamera(dev.deviceId)}
-							className={styles['btn_device']}
-						>
-							{dev.label}
-						</button>
-					))}
-				</div>
+				<ScrollContainer>
+					<div className={styles['devices']}>
+						{devices?.devices?.map(dev => (
+							<button
+								onClick={() => changeCamera(dev.deviceId)}
+								className={styles['btn_device']}
+								key={dev.deviceId}
+							>
+								{dev.label}
+							</button>
+						))}
+					</div>
+				</ScrollContainer>
 				<button className={styles['btn_cross']}>
 					<Image
 						src={crossIcon}

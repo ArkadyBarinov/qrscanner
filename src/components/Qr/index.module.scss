@@ -15,7 +15,7 @@
 	top: 10%;
 }
 
-.container_btn {
+.btn_container {
 	display: flex;
 	height: 100vh;
 	flex-direction: column-reverse;
@@ -58,9 +58,6 @@
 	border: 0 solid transparent;
 }
 
-// .input_gallery {
-// 	display: none;
-// }
 .btn_header {
 	display: flex;
 	justify-content: space-between;
