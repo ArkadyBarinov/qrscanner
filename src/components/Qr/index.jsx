@@ -15,7 +15,6 @@ const Qr = () => {
 	})
 	const [devices, setDevices] = useState({
 		facingMode: 'environment',
-		legacyMode: true,
 	})
 
 	const [reloded, setReloded] = useState(false)
@@ -129,6 +128,7 @@ const Qr = () => {
 						devices.cameraId && {
 							audio: false,
 							video: { deviceId: devices.cameraId },
+							legacyMode: true,
 						}
 					}
 				/>
