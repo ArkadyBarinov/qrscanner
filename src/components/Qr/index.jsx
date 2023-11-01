@@ -15,7 +15,7 @@ const Qr = () => {
 	})
 	const [devices, setDevices] = useState({
 		facingMode: 'environment',
-		legacyMode: 'true',
+		legacyMode: true,
 	})
 
 	const [reloded, setReloded] = useState(false)
