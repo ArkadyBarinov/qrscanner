@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import QrReader from 'react-qr-scanner'
+// import QrReader from 'react-qr-scanner'
+import { QrReader } from 'react-qr-reader'
 import Image from 'next/image'
 import styles from './index.module.scss'
 import { ScrollContainer } from 'react-indiana-drag-scroll'
@@ -17,13 +18,13 @@ const Qr = () => {
 		facingMode: 'environment',
 	})
 
-	const [reloded, setReloded] = useState(false)
-
 	const [currentCameraId, setCurrentCameraId] = useState()
+	const [delayScan, setDelayScan] = useState(500)
 
 	const handleScan = e => {
 		if (e?.text && !Object.keys(data || {}).length) {
 			setData(e)
+			setDelayScan(false)
 		}
 	}
 
@@ -72,11 +73,6 @@ const Qr = () => {
 		console.log(cameraId)
 	}
 
-	useEffect(() => {
-		if (reloded) {
-			setTimeout(setReloded(), 100)
-		}
-	}, [reloded])
 	console.log(data)
 
 	const getUserData = element => {
@@ -125,10 +121,24 @@ const Qr = () => {
 				</button>
 			</div>
 			{!Object.keys(data || {}).length ? (
+				// 	<QrReader
+				// 		className={styles['scanner']}
+				// 		onScan={handleScan}
+				// 		delay={500}
+				// 		onError={handleError}
+				// 		constraints={
+				// 			devices.cameraId && {
+				// 				audio: false,
+				// 				video: { deviceId: devices.cameraId },
+				// 			}
+				// 		}
+				// 	/>
+				// ) : null}
 				<QrReader
 					className={styles['scanner']}
-					onScan={handleScan}
-					delay={500}
+					style='position: fixed; top: 0; bottom: 0;left: 0;	right: 0;	width: 100%;	height: 100vh; object-fit: cover;	z-index: -1'
+					scanDelay={delayScan}
+					onResult={handleScan}
 					onError={handleError}
 					constraints={
 						devices.cameraId && {
