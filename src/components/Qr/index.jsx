@@ -19,6 +19,8 @@ const Qr = () => {
 
 	const [reloded, setReloded] = useState(false)
 
+	const [currentCameraId, setCurrentCameraId] = useState()
+
 	const handleScan = e => {
 		if (e?.text && !Object.keys(data || {}).length) {
 			setData(e)
@@ -27,12 +29,15 @@ const Qr = () => {
 
 	const refresh = () => {
 		setData({})
+		changeCamera(currentCameraId)
+		console.log(currentCameraId)
 	}
 
 	const handleError = err => {
 		console.error(err)
 	}
 
+	// после того как отсканировал, то при нажатии на refreh и переключении камеры больше не сканируется
 	useEffect(() => {
 		const a = 'enumerateDevices'
 		navigator['mediaDevices']
@@ -47,6 +52,8 @@ const Qr = () => {
 				return videoSelect
 			})
 			.then(devices => {
+				setCurrentCameraId(devices[0].deviceId)
+				console.log(devices[0].deviceId)
 				setDevices({
 					cameraId: devices[0].deviceId,
 					devices,
@@ -57,6 +64,7 @@ const Qr = () => {
 
 	const changeCamera = cameraId => {
 		setData({})
+		setCurrentCameraId(cameraId)
 		setDevices({
 			...devices,
 			cameraId,
@@ -84,31 +92,29 @@ const Qr = () => {
 				<button className={styles['btn_refresh']} onClick={refresh}>
 					Refresh
 				</button>
-				<button className={styles['btn_flashlight']}>
+				<button className={styles['btn_transparent']}>
 					<Image
 						src={lightningIcon}
 						height={36}
 						width={36}
-						priority={false}
+						priority={true}
 						alt='Flashlight'
 					/>
 				</button>
 			</div>
 			<div className={styles['btn_header']}>
-				<ScrollContainer>
-					<div className={styles['devices']}>
-						{devices?.devices?.map(dev => (
-							<button
-								onClick={() => changeCamera(dev.deviceId)}
-								className={styles['btn_device']}
-								key={dev.deviceId}
-							>
-								{dev.label}
-							</button>
-						))}
-					</div>
+				<ScrollContainer className={styles['devices']}>
+					{devices?.devices?.map(dev => (
+						<button
+							onClick={() => changeCamera(dev.deviceId)}
+							className={styles['btn_device']}
+							key={dev.deviceId}
+						>
+							{dev.label}
+						</button>
+					))}
 				</ScrollContainer>
-				<button className={styles['btn_cross']}>
+				<button className={styles['btn_transparent']}>
 					<Image
 						src={crossIcon}
 						height={36}
@@ -128,7 +134,6 @@ const Qr = () => {
 						devices.cameraId && {
 							audio: false,
 							video: { deviceId: devices.cameraId },
-							legacyMode: true,
 						}
 					}
 				/>
