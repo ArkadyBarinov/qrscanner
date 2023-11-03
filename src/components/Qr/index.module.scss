@@ -17,10 +17,11 @@
 
 .btn_container {
 	display: flex;
-	height: 100vh;
+	// height: 100vh;
 	flex-direction: column-reverse;
 	justify-content: space-between;
 	z-index: 1;
+	height: calc(var(--vh, 1vh) * 100);
 }
 
 .btn_footer {

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-// import QrReader from 'react-qr-scanner'
-import { QrReader } from 'react-qr-reader'
+import QrReader from 'react-qr-scanner'
 import Image from 'next/image'
 import styles from './index.module.scss'
 import { ScrollContainer } from 'react-indiana-drag-scroll'
@@ -19,17 +18,14 @@ const Qr = () => {
 	})
 
 	const [currentCameraId, setCurrentCameraId] = useState()
-	const [delayScan, setDelayScan] = useState(500)
 
 	const handleScan = e => {
 		if (e?.text && !Object.keys(data || {}).length) {
 			setData(e)
-			setDelayScan(false)
 		}
 	}
 
 	const refresh = () => {
-		setData({})
 		changeCamera(currentCameraId)
 		console.log(currentCameraId)
 	}
@@ -54,27 +50,30 @@ const Qr = () => {
 			})
 			.then(devices => {
 				setCurrentCameraId(devices[0].deviceId)
-				console.log(devices[0].deviceId)
 				setDevices({
 					cameraId: devices[0].deviceId,
 					devices,
 					loading: false,
 				})
 			})
+		const vh = window.innerHeight * 0.01
+		document.documentElement.style.setProperty('--vh', `${vh}px`)
 	}, [])
 
 	const changeCamera = cameraId => {
 		setData({})
 		setCurrentCameraId(cameraId)
-		setDevices({
-			...devices,
-			cameraId,
-		})
-		console.log(cameraId)
+		setQrReaderVisible(false)
+		setTimeout(() => {
+			setQrReaderVisible(true)
+			setDevices({
+				...devices,
+				cameraId,
+			})
+		}, 100)
 	}
 
 	console.log(data)
-
 	const getUserData = element => {
 		setUserData({
 			...userData,
@@ -82,13 +81,18 @@ const Qr = () => {
 		})
 	}
 
+	const [qrReaderVisible, setQrReaderVisible] = useState(true)
+
 	return (
 		<div className={styles['btn_container']}>
 			<div className={styles['btn_footer']}>
 				<button className={styles['btn_refresh']} onClick={refresh}>
 					Refresh
 				</button>
-				<button className={styles['btn_transparent']}>
+				<button
+					className={styles['btn_transparent']}
+					onClick={() => setCurrentCameraId(false)}
+				>
 					<Image
 						src={lightningIcon}
 						height={36}
@@ -120,25 +124,11 @@ const Qr = () => {
 					/>
 				</button>
 			</div>
-			{!Object.keys(data || {}).length ? (
-				// 	<QrReader
-				// 		className={styles['scanner']}
-				// 		onScan={handleScan}
-				// 		delay={500}
-				// 		onError={handleError}
-				// 		constraints={
-				// 			devices.cameraId && {
-				// 				audio: false,
-				// 				video: { deviceId: devices.cameraId },
-				// 			}
-				// 		}
-				// 	/>
-				// ) : null}
+			{!Object.keys(data || {}).length && qrReaderVisible ? (
 				<QrReader
 					className={styles['scanner']}
-					style='position: fixed; top: 0; bottom: 0;left: 0;	right: 0;	width: 100%;	height: 100vh; object-fit: cover;	z-index: -1'
-					scanDelay={delayScan}
-					onResult={handleScan}
+					onScan={handleScan}
+					delay={500}
 					onError={handleError}
 					constraints={
 						devices.cameraId && {
