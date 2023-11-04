@@ -19,6 +19,8 @@ const Qr = () => {
 
 	const [currentCameraId, setCurrentCameraId] = useState()
 
+	const [loading, setLoading] = useState(false)
+
 	const handleScan = e => {
 		if (e?.text && !Object.keys(data || {}).length) {
 			setData(e)
@@ -36,6 +38,9 @@ const Qr = () => {
 
 	// после того как отсканировал, то при нажатии на refreh и переключении камеры больше не сканируется
 	useEffect(() => {
+		if (navigator) {
+			setLoading(true)
+		}
 		const a = 'enumerateDevices'
 		navigator['mediaDevices']
 			[a]()
@@ -50,6 +55,7 @@ const Qr = () => {
 			})
 			.then(devices => {
 				setCurrentCameraId(devices[0].deviceId)
+				setLoading(false)
 				setDevices({
 					cameraId: devices[0].deviceId,
 					devices,
@@ -82,17 +88,15 @@ const Qr = () => {
 	}
 
 	const [qrReaderVisible, setQrReaderVisible] = useState(true)
-
+	// при загрузке камеры не будет, после доступа появится
+	// или использовволать reader
 	return (
 		<div className={styles['btn_container']}>
 			<div className={styles['btn_footer']}>
 				<button className={styles['btn_refresh']} onClick={refresh}>
 					Refresh
 				</button>
-				<button
-					className={styles['btn_transparent']}
-					onClick={() => setCurrentCameraId(false)}
-				>
+				<button className={styles['btn_transparent']}>
 					<Image
 						src={lightningIcon}
 						height={36}
@@ -124,7 +128,7 @@ const Qr = () => {
 					/>
 				</button>
 			</div>
-			{!Object.keys(data || {}).length && qrReaderVisible ? (
+			{!loading && !Object.keys(data || {}).length && qrReaderVisible ? (
 				<QrReader
 					className={styles['scanner']}
 					onScan={handleScan}
