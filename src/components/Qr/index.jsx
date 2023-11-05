@@ -36,34 +36,38 @@ const Qr = () => {
 		console.error(err)
 	}
 
-	// после того как отсканировал, то при нажатии на refreh и переключении камеры больше не сканируется
 	useEffect(() => {
 		if (navigator) {
 			setLoading(true)
+			setDevices({
+				loading: true,
+			})
+
+			const a = 'enumerateDevices'
+			navigator['mediaDevices']
+				[a]()
+				.then(devices => {
+					const videoSelect = []
+					devices.forEach(device => {
+						if (device.kind === 'videoinput') {
+							videoSelect.push(device)
+						}
+					})
+					return videoSelect
+				})
+				.then(devices => {
+					setCurrentCameraId(devices[0].deviceId)
+					setLoading(false)
+					console.log(devices.length)
+					setDevices({
+						cameraId: devices[0].deviceId,
+						devices,
+						loading: false,
+					})
+				})
+			const vh = window.innerHeight * 0.01
+			document.documentElement.style.setProperty('--vh', `${vh}px`)
 		}
-		const a = 'enumerateDevices'
-		navigator['mediaDevices']
-			[a]()
-			.then(devices => {
-				const videoSelect = []
-				devices.forEach(device => {
-					if (device.kind === 'videoinput') {
-						videoSelect.push(device)
-					}
-				})
-				return videoSelect
-			})
-			.then(devices => {
-				setCurrentCameraId(devices[0].deviceId)
-				setLoading(false)
-				setDevices({
-					cameraId: devices[0].deviceId,
-					devices,
-					loading: false,
-				})
-			})
-		const vh = window.innerHeight * 0.01
-		document.documentElement.style.setProperty('--vh', `${vh}px`)
 	}, [])
 
 	const changeCamera = cameraId => {
@@ -79,7 +83,6 @@ const Qr = () => {
 		}, 100)
 	}
 
-	console.log(data)
 	const getUserData = element => {
 		setUserData({
 			...userData,
@@ -88,8 +91,7 @@ const Qr = () => {
 	}
 
 	const [qrReaderVisible, setQrReaderVisible] = useState(true)
-	// при загрузке камеры не будет, после доступа появится
-	// или использовволать reader
+
 	return (
 		<div className={styles['btn_container']}>
 			<div className={styles['btn_footer']}>
