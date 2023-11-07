@@ -130,7 +130,7 @@ const Qr = () => {
 							audio: false,
 							video: {
 								facingMode: `environment`,
-								deviceId: devices.cameraId,
+								// deviceId: devices.cameraId,
 							},
 						}
 					}
