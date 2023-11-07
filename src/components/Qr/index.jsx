@@ -128,7 +128,8 @@ const Qr = () => {
 					constraints={
 						devices.cameraId && {
 							audio: false,
-							video: { facingMode: 'environment' },
+							// video: { facingMode: 'environment' },
+							facingMode: {exact: "environment" }
 						}
 					}
 				/>
