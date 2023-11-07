@@ -14,10 +14,12 @@ const Qr = () => {
 		phone: '',
 	})
 	const [devices, setDevices] = useState({
-		facingMode: 'environment',
+		// facingMode: 'environment',
 	})
 
 	const [currentCameraId, setCurrentCameraId] = useState()
+
+	const [qrReaderVisible, setQrReaderVisible] = useState(true)
 
 	const handleScan = e => {
 		if (e?.text && !Object.keys(data || {}).length) {
@@ -48,9 +50,9 @@ const Qr = () => {
 				return videoSelect
 			})
 			.then(devices => {
-				setCurrentCameraId(devices[1].deviceId)
+				setCurrentCameraId(devices[0].deviceId)
 				setDevices({
-					cameraId: devices[1].deviceId,
+					cameraId: devices[0].deviceId,
 					devices,
 					loading: false,
 				})
@@ -78,8 +80,6 @@ const Qr = () => {
 			userName: element,
 		})
 	}
-
-	const [qrReaderVisible, setQrReaderVisible] = useState(true)
 
 	return (
 		<div className={styles['btn_container']}>
@@ -128,7 +128,10 @@ const Qr = () => {
 					constraints={
 						devices.cameraId && {
 							audio: false,
-							video: { deviceId: devices.cameraId },
+							video: {
+								facingMode: `environment`,
+								deviceId: devices.cameraId,
+							},
 						}
 					}
 				/>
