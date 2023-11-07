@@ -50,9 +50,9 @@ const Qr = () => {
 				return videoSelect
 			})
 			.then(devices => {
-				setCurrentCameraId(devices[0].deviceId)
+				setCurrentCameraId(devices[1].deviceId)
 				setDevices({
-					cameraId: devices[0].deviceId,
+					cameraId: devices[1].deviceId,
 					devices,
 					loading: false,
 				})
@@ -128,7 +128,7 @@ const Qr = () => {
 					constraints={
 						devices.cameraId && {
 							audio: false,
-							video: { deviceId: devices.cameraId },
+							video: { facingMode: 'environment' },
 						}
 					}
 				/>
