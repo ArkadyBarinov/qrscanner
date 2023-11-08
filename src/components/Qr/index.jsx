@@ -14,9 +14,7 @@ const Qr = () => {
 		userName: '',
 		phone: '',
 	})
-	const [devices, setDevices] = useState({
-		// facingMode: 'environment',
-	})
+	const [devices, setDevices] = useState({})
 
 	const [currentCameraId, setCurrentCameraId] = useState()
 
