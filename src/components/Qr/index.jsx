@@ -8,7 +8,7 @@ import lightningIcon from '../../assets/img/lightning.svg'
 import crossIcon from '../../assets/img/cross.svg'
 
 const Qr = () => {
-	const [dontShow, setDontShow] = useState(true);
+	const [dontShow, setDontShow] = useState(true)
 	const [data, setData] = useState({})
 	const [userData, setUserData] = useState({
 		userName: '',
@@ -38,31 +38,33 @@ const Qr = () => {
 	}
 
 	useEffect(() => {
-		navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(() => {
-			const a = 'enumerateDevices'
-			navigator['mediaDevices']
-				[a]()
-				.then(devices => {
-					const videoSelect = []
-					devices.forEach(device => {
-						if (device.kind === 'videoinput') {
-							videoSelect.push(device)
-						}
+		navigator.mediaDevices
+			.getUserMedia({ video: true, audio: true })
+			.then(() => {
+				const a = 'enumerateDevices'
+				navigator['mediaDevices']
+					[a]()
+					.then(devices => {
+						const videoSelect = []
+						devices.forEach(device => {
+							if (device.kind === 'videoinput') {
+								videoSelect.push(device)
+							}
+						})
+						return videoSelect
 					})
-					return videoSelect
-				})
-				.then(devices => {
-					setCurrentCameraId(devices[0]?.deviceId)
-					setDevices({
-						cameraId: devices[0].deviceId,
-						devices,
-						loading: false,
+					.then(devices => {
+						setCurrentCameraId(devices[0]?.deviceId)
+						setDevices({
+							cameraId: devices[0].deviceId,
+							devices,
+							loading: false,
+						})
 					})
-				})
-			const vh = window.innerHeight * 0.01
-			document.documentElement.style.setProperty('--vh', `${vh}px`)
-			setDontShow(false);
-		})
+				const vh = window.innerHeight * 0.01
+				document.documentElement.style.setProperty('--vh', `${vh}px`)
+				setDontShow(false)
+			})
 	}, [])
 
 	const changeCamera = cameraId => {
@@ -85,7 +87,7 @@ const Qr = () => {
 		})
 	}
 
-	if (dontShow) return null;
+	if (dontShow) return null
 
 	return (
 		<div className={styles['btn_container']}>
@@ -134,8 +136,7 @@ const Qr = () => {
 					constraints={
 						devices.cameraId && {
 							audio: false,
-							// video: { facingMode: 'environment' },
-							facingMode: {exact: "environment" }
+							video: { deviceId: devices.cameraId },
 						}
 					}
 				/>
