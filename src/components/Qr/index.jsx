@@ -50,9 +50,9 @@ const Qr = () => {
 					return videoSelect
 				})
 				.then(devices => {
-					setCurrentCameraId(devices[1].deviceId)
+					setCurrentCameraId(devices[0].deviceId)
 					setDevices({
-						cameraId: devices[1].deviceId,
+						cameraId: devices[0].deviceId,
 						devices,
 						loading: false,
 					})
@@ -86,8 +86,10 @@ const Qr = () => {
 	const [flashOn, setFlashOn] = useState(false)
 
 	const toggleTorch = () => {
-		navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-			const track = stream.getVideoTracks()[0]
+		navigator.mediaDevices.getUserMedia({ video: true }).then(devices => {
+			const track = devices.getVideoTracks()[0]
+			console.log(track)
+			console.log(currentCameraId)
 			if (flashOn) {
 				track.applyConstraints({ advanced: [{ torch: false }] })
 				setFlashOn(false)
