@@ -83,6 +83,23 @@ const Qr = () => {
 		})
 	}
 
+	const [flashOn, setFlashOn] = useState(false)
+
+	const toggleTorch = () => {
+		navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+			const track = stream.getVideoTracks()[0]
+			if ('torch' in track.getCapabilities()) {
+				if (flashOn) {
+					track.applyConstraints({ advanced: [{ torch: false }] })
+					setFlashOn(false)
+				} else {
+					track.applyConstraints({ advanced: [{ torch: true }] })
+					setFlashOn(true)
+				}
+			}
+		})
+	}
+
 	if (dontShow) return null
 
 	return (
@@ -91,7 +108,7 @@ const Qr = () => {
 				<button className={styles['btn_refresh']} onClick={refresh}>
 					Refresh
 				</button>
-				<button className={styles['btn_transparent']}>
+				<button className={styles['btn_transparent']} onClick={toggleTorch}>
 					<Image
 						src={lightningIcon}
 						height={36}
