@@ -88,14 +88,12 @@ const Qr = () => {
 	const toggleTorch = () => {
 		navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
 			const track = stream.getVideoTracks()[0]
-			if ('torch' in track.getCapabilities()) {
-				if (flashOn) {
-					track.applyConstraints({ advanced: [{ torch: false }] })
-					setFlashOn(false)
-				} else {
-					track.applyConstraints({ advanced: [{ torch: true }] })
-					setFlashOn(true)
-				}
+			if (flashOn) {
+				track.applyConstraints({ advanced: [{ torch: false }] })
+				setFlashOn(false)
+			} else {
+				track.applyConstraints({ advanced: [{ torch: true }] })
+				setFlashOn(true)
 			}
 		})
 	}
