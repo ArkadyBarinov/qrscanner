@@ -20,6 +20,8 @@ const Qr = () => {
 
 	const [qrReaderVisible, setQrReaderVisible] = useState(true)
 
+	const [flashOn, setFlashOn] = useState(false)
+
 	const handleScan = e => {
 		if (e?.text && !Object.keys(data || {}).length) {
 			setData(e)
@@ -36,33 +38,31 @@ const Qr = () => {
 	}
 
 	useEffect(() => {
-		navigator.mediaDevices
-			.getUserMedia({ video: true, torch: true })
-			.then(() => {
-				const a = 'enumerateDevices'
-				navigator['mediaDevices']
-					[a]()
-					.then(devices => {
-						const videoSelect = []
-						devices.forEach(device => {
-							if (device.kind === 'videoinput') {
-								videoSelect.push(device)
-							}
-						})
-						return videoSelect
+		navigator.mediaDevices.getUserMedia({ video: true }).then(() => {
+			const a = 'enumerateDevices'
+			navigator['mediaDevices']
+				[a]()
+				.then(devices => {
+					const videoSelect = []
+					devices.forEach(device => {
+						if (device.kind === 'videoinput') {
+							videoSelect.push(device)
+						}
 					})
-					.then(devices => {
-						setCurrentCameraId(devices[0].deviceId)
-						setDevices({
-							cameraId: devices[0].deviceId,
-							devices,
-							loading: false,
-						})
+					return videoSelect
+				})
+				.then(devices => {
+					setCurrentCameraId(devices[1].deviceId)
+					setDevices({
+						cameraId: devices[1].deviceId,
+						devices,
+						loading: false,
 					})
-				const vh = window.innerHeight * 0.01
-				document.documentElement.style.setProperty('--vh', `${vh}px`)
-				setDontShow(false)
-			})
+				})
+			const vh = window.innerHeight * 0.01
+			document.documentElement.style.setProperty('--vh', `${vh}px`)
+			setDontShow(false)
+		})
 	}, [])
 
 	const changeCamera = cameraId => {
@@ -85,20 +85,17 @@ const Qr = () => {
 		})
 	}
 
-	const [flashOn, setFlashOn] = useState(false)
-
 	const toggleTorch = () => {
 		navigator.mediaDevices.getUserMedia({ video: true }).then(devices => {
 			const track = devices.getVideoTracks()[0]
 			console.log(track)
-			console.log(currentCameraId)
-			if (flashOn) {
-				track.applyConstraints({ advanced: [{ torch: false }] })
-				setFlashOn(false)
-			} else {
-				track.applyConstraints({ advanced: [{ torch: true }] })
-				setFlashOn(true)
-			}
+			track.applyConstraints({
+				advanced: [
+					{
+						torch: flashOn ? true : false,
+					},
+				],
+			})
 		})
 	}
 
