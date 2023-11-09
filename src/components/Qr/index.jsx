@@ -36,31 +36,33 @@ const Qr = () => {
 	}
 
 	useEffect(() => {
-		navigator.mediaDevices.getUserMedia({ video: true }).then(() => {
-			const a = 'enumerateDevices'
-			navigator['mediaDevices']
-				[a]()
-				.then(devices => {
-					const videoSelect = []
-					devices.forEach(device => {
-						if (device.kind === 'videoinput') {
-							videoSelect.push(device)
-						}
+		navigator.mediaDevices
+			.getUserMedia({ video: true, torch: true })
+			.then(() => {
+				const a = 'enumerateDevices'
+				navigator['mediaDevices']
+					[a]()
+					.then(devices => {
+						const videoSelect = []
+						devices.forEach(device => {
+							if (device.kind === 'videoinput') {
+								videoSelect.push(device)
+							}
+						})
+						return videoSelect
 					})
-					return videoSelect
-				})
-				.then(devices => {
-					setCurrentCameraId(devices[0].deviceId)
-					setDevices({
-						cameraId: devices[0].deviceId,
-						devices,
-						loading: false,
+					.then(devices => {
+						setCurrentCameraId(devices[0].deviceId)
+						setDevices({
+							cameraId: devices[0].deviceId,
+							devices,
+							loading: false,
+						})
 					})
-				})
-			const vh = window.innerHeight * 0.01
-			document.documentElement.style.setProperty('--vh', `${vh}px`)
-			setDontShow(false)
-		})
+				const vh = window.innerHeight * 0.01
+				document.documentElement.style.setProperty('--vh', `${vh}px`)
+				setDontShow(false)
+			})
 	}, [])
 
 	const changeCamera = cameraId => {
