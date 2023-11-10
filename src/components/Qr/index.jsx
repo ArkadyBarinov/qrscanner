@@ -86,18 +86,22 @@ const Qr = () => {
 	}
 
 	const toggleTorch = () => {
-		navigator.mediaDevices.getUserMedia({ video: true }).then(devices => {
-			const track = devices.getVideoTracks()[0]
-			console.log(track)
-			if (flashOn) {
-				track.applyConstraints({ advanced: [{ torch: false }] })
-				setFlashOn(false)
-			} else {
-				track.applyConstraints({ advanced: [{ torch: true }] })
-				setFlashOn(true)
-			}
-			console.log(flashOn)
-		})
+		navigator.mediaDevices
+			.getUserMedia({ video: { deviceId: { exact: currentCameraId } } })
+			.then(devices => {
+				const track = devices.getVideoTracks()[0]
+				console.log(track)
+				console.log(track.getCapabilities())
+				if (track.getCapabilities().torch) {
+					if (flashOn) {
+						track.applyConstraints({ advanced: [{ torch: false }] })
+						setFlashOn(false)
+					} else {
+						track.applyConstraints({ advanced: [{ torch: true }] })
+						setFlashOn(true)
+					}
+				}
+			})
 	}
 
 	if (dontShow) return null
@@ -149,7 +153,7 @@ const Qr = () => {
 					constraints={
 						devices.cameraId && {
 							audio: false,
-							video: { facingMode: 'environment' },
+							video: { deviceId: devices.cameraId },
 						}
 					}
 				/>
