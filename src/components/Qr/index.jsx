@@ -89,13 +89,14 @@ const Qr = () => {
 		navigator.mediaDevices.getUserMedia({ video: true }).then(devices => {
 			const track = devices.getVideoTracks()[0]
 			console.log(track)
-			track.applyConstraints({
-				advanced: [
-					{
-						torch: flashOn ? true : false,
-					},
-				],
-			})
+			if (flashOn) {
+				track.applyConstraints({ advanced: [{ torch: false }] })
+				setFlashOn(false)
+			} else {
+				track.applyConstraints({ advanced: [{ torch: true }] })
+				setFlashOn(true)
+			}
+			console.log(flashOn)
 		})
 	}
 
