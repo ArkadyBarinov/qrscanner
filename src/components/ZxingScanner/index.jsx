@@ -94,7 +94,7 @@ const ZxingScanner = () => {
 							scanRegionTimeoutRef.current = setTimeout(() => {
 								setScanRegion(null)
 								scanRegionTimeoutRef.current = null
-							}, 100)
+							}, 500)
 						}
 					}
 					if (err && !(err.name === 'NotFoundException')) {
