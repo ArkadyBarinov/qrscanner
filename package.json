@@ -16,6 +16,7 @@
     "safari 14"
   ],
   "dependencies": {
+    "@zxing/library": "^0.21.3",
     "next": "^13.5.4",
     "react": "latest",
     "react-dom": "latest",
